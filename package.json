@@ -8,7 +8,6 @@
 		"url": "https://github.com/mrsCandyBar/dev_mustache.git"
 	},
 	"dependencies": {
-		"autoreload-gulp": "^0.2.1",
 		"gulp": "^3.9.1",
 		"gulp-livereload": "^3.8.1",
 		"mustache": "^2.3.0"

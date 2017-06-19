@@ -4,8 +4,6 @@ const gulp = require('gulp');
 const sass = require('gulp-sass');
 const babel = require('gulp-babel');
 const livereload  = require('gulp-livereload');
-const http = require('http');
-const st = require('st');
  
 var paths = {
   scripts: 'build/js/*.js',
