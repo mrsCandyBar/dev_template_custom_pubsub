@@ -1,0 +1,10 @@
+<nav>
+    <ul class="nav">
+    	<li><button>Random</li>
+    	{{ #cakes }}
+    		<li>
+    		 	<button class="btn {{ status }}" data-index="{{ index }}">{{ type }}</button>
+    		</li>
+    	{{ /cakes }}
+    </ul>
+</nav>
