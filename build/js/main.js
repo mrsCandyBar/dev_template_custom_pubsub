@@ -36,6 +36,7 @@
         // initialize scripts
         render();
         bindUIevents();
+        bindStoreEvents(store);
 
         function render() {
           _generateCake('template/description.html', store.cakes[selectedCake], $description);
@@ -53,8 +54,7 @@
           $menu.delegate('button', 'click', (button) => {
 
             selectedCake = button.currentTarget.dataset.index ? button.currentTarget.dataset.index : _getRandomNumberBetween(0,2);
-            _setCakeAsSelected(store.cakes, selectedCake);
-            
+            events.emit('store.update.selected.cake', selectedCake);
             render(button.currentTarget.dataset);
           });
         };
@@ -78,6 +78,12 @@
               return selectedCake;
             } 
           }
+        }
+
+        function bindStoreEvents(store) {
+          events.on('store.update.selected.cake', (selectedCake) => {
+            _setCakeAsSelected(store.cakes, selectedCake);
+          });
         }
 
         function _setCakeAsSelected(cakes, selectedCake) {
