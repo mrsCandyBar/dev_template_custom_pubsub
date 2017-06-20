@@ -2,7 +2,6 @@
 
 import gulp from 'gulp';
 import sass from 'gulp-sass';
-import babel from 'gulp-babel';
 import livereload  from 'gulp-livereload';
 import webpack from 'webpack-stream';
  
@@ -17,15 +16,6 @@ gulp.task('pageReload', () => {
     .pipe(livereload());
 })
 
-gulp.task('runBabel', () => {
-  return gulp.src(paths.scripts)
-    .pipe(babel({
-      presets: ['es2015']
-    }))
-    .pipe(gulp.dest('assets/js'))
-    .pipe(livereload());
-});
-
 gulp.task('sass', function() {
   return gulp.src(paths.sass)
     .pipe(sass().on('error', sass.logError))
@@ -36,24 +26,25 @@ gulp.task('sass', function() {
 gulp.task('watch', function() {
   livereload.listen();
 
-  gulp.watch(paths.scripts, ['runBabel', 'webpacker']);
+  gulp.watch(paths.scripts, ['webpacker']);
   gulp.watch(paths.sass, ['sass']);
   gulp.watch(paths.pages, ['pageReload']);
 });
  
 gulp.task('webpacker', function() {
-    return gulp.src('./build/js/main.js')
-        .pipe(webpack({
-          output: {
-              filename: 'main.js'
-          },
-          module: {
-              loaders: [{
-                loader: 'babel-loader'
-              }]
-          }
-        }))
-        .pipe(gulp.dest('assets/js'));
+  return gulp.src('./build/js/main.js')
+    .pipe(webpack({
+      output: {
+        filename: 'main.js'
+      },
+      module: {
+        loaders: [{
+          loader: 'babel-loader'
+        }]
+      }
+    }))
+    .pipe(gulp.dest('assets/js'))
+    .pipe(livereload());
 });
 
 gulp.task('default', ['webpacker', 'sass', 'watch']);
