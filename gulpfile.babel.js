@@ -1,9 +1,9 @@
 /*'use strict';*/
 
-const gulp = require('gulp');
-const sass = require('gulp-sass');
-const babel = require('gulp-babel');
-const livereload  = require('gulp-livereload');
+import gulp from 'gulp';
+import sass from 'gulp-sass';
+import babel from 'gulp-babel';
+import livereload  from 'gulp-livereload';
  
 var paths = {
   scripts: 'build/js/*.js',

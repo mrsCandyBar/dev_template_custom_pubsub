@@ -1,37 +1,38 @@
 
+
       let generateCake = (() => {
 
-        let $description = $('#description'), 
-            $menu = $('#menu'),
-            selectedCake = 0,
+        let $description = $('#description');
+        let $menu = $('#menu');
+        let selectedCake = 0;
 
-            store = {
-              cakes: [
-                {
-                  type: "Chocolate",
-                  ingredient: 'cocoa',            
-                  taste: "chocolatey goodness",
-                  status: 'btn-primary'
-                },
-                {
-                  type: "Strawberry",
-                  ingredient: 'strawberries',
-                  taste: "berry berry nice"
-                },
-                {
-                  type: "Butterscotch",
-                  ingredient: 'caramel',
-                  taste: "creamy caramel clouds"
-                },          
-              ], 
-              index: function() {
-                for (let cake = 0; cake < store.cakes.length; cake++) {
-                  if (store.cakes[cake].type === this.type) {
-                    return cake;
-                  }
+        let store = {
+            cakes: [
+              {
+                type: "Chocolate",
+                ingredient: 'cocoa',            
+                taste: "chocolatey goodness",
+                status: 'btn-primary'
+              },
+              {
+                type: "Strawberry",
+                ingredient: 'strawberries',
+                taste: "berry berry nice"
+              },
+              {
+                type: "Butterscotch",
+                ingredient: 'caramel',
+                taste: "creamy caramel clouds"
+              },          
+            ], 
+            index: function() {
+              for (let cake = 0; cake < store.cakes.length; cake++) {
+                if (store.cakes[cake].type === this.type) {
+                  return cake;
                 }
               }
-            };
+            }
+        };
 
         // initialize scripts
         render();
@@ -54,7 +55,7 @@
           $menu.delegate('button', 'click', (button) => {
 
             selectedCake = button.currentTarget.dataset.index ? button.currentTarget.dataset.index : _getRandomNumberBetween(0,2);
-            events.emit('store.update.selected.cake', selectedCake);
+            Events.emit('store.update.selected.cake', selectedCake);
             render(button.currentTarget.dataset);
           });
         };
@@ -81,7 +82,7 @@
         }
 
         function bindStoreEvents(store) {
-          events.on('store.update.selected.cake', (selectedCake) => {
+          Events.on('store.update.selected.cake', (selectedCake) => {
             _setCakeAsSelected(store.cakes, selectedCake);
           });
         }
