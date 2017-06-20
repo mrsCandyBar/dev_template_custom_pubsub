@@ -8,8 +8,11 @@
 		"url": "https://github.com/mrsCandyBar/dev_mustache.git"
 	},
 	"dependencies": {
+		"babel-loader": "^7.0.0",
 		"gulp-livereload": "^3.8.1",
-		"mustache": "^2.3.0"
+		"gulp-webpack": "^1.5.0",
+		"mustache": "^2.3.0",
+		"webpack-stream": "^3.2.0"
 	},
 	"devDependencies": {
 		"babel-core": "^6.25.0",
@@ -17,6 +20,6 @@
 		"babel-register": "^6.24.1",
 		"gulp": "^3.9.1",
 		"gulp-babel": "^6.1.2",
-		"gulp-sass": "^3.1.0",
+		"gulp-sass": "^3.1.0"
 	}
 }

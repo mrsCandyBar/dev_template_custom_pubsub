@@ -4,6 +4,7 @@ import gulp from 'gulp';
 import sass from 'gulp-sass';
 import babel from 'gulp-babel';
 import livereload  from 'gulp-livereload';
+import webpack from 'webpack-stream';
  
 var paths = {
   scripts: 'build/js/*.js',
@@ -35,9 +36,24 @@ gulp.task('sass', function() {
 gulp.task('watch', function() {
   livereload.listen();
 
-  gulp.watch(paths.scripts, ['runBabel']);
+  gulp.watch(paths.scripts, ['runBabel', 'webpacker']);
   gulp.watch(paths.sass, ['sass']);
   gulp.watch(paths.pages, ['pageReload']);
 });
  
-gulp.task('default', ['runBabel', 'sass', 'watch']);
+gulp.task('webpacker', function() {
+    return gulp.src('./build/js/main.js')
+        .pipe(webpack({
+          output: {
+              filename: 'main.js'
+          },
+          module: {
+              loaders: [{
+                loader: 'babel-loader'
+              }]
+          }
+        }))
+        .pipe(gulp.dest('assets/js'));
+});
+
+gulp.task('default', ['webpacker', 'sass', 'watch']);

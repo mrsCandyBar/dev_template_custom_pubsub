@@ -1,96 +1,83 @@
+import Events from './pubsub.js';
+import Data from './resources.js';
 
+class generateCake {
 
-      let generateCake = (() => {
-
-        let $description = $('#description');
-        let $menu = $('#menu');
-        let selectedCake = 0;
-
-        let store = {
-            cakes: [
-              {
-                type: "Chocolate",
-                ingredient: 'cocoa',            
-                taste: "chocolatey goodness",
-                status: 'btn-primary'
-              },
-              {
-                type: "Strawberry",
-                ingredient: 'strawberries',
-                taste: "berry berry nice"
-              },
-              {
-                type: "Butterscotch",
-                ingredient: 'caramel',
-                taste: "creamy caramel clouds"
-              },          
-            ], 
-            index: function() {
-              for (let cake = 0; cake < store.cakes.length; cake++) {
-                if (store.cakes[cake].type === this.type) {
-                  return cake;
-                }
-              }
-            }
-        };
-
-        // initialize scripts
-        render();
-        bindUIevents();
-        bindStoreEvents(store);
-
-        function render() {
-          _generateCake('template/description.html', store.cakes[selectedCake], $description);
-          _generateCake('template/menu.html', store, $menu);
-        }
-
-        function _generateCake(templateUrl, getCake, destination) {
-          $.get(templateUrl, (template) => {
-            let rendered = Mustache.render(template, getCake);
-            destination.html(rendered);
-          });
-        }
-
-        function bindUIevents() {
-          $menu.delegate('button', 'click', (button) => {
-
-            selectedCake = button.currentTarget.dataset.index ? button.currentTarget.dataset.index : _getRandomNumberBetween(0,2);
-            Events.emit('store.update.selected.cake', selectedCake);
-            render(button.currentTarget.dataset);
-          });
-        };
-
-        function _getRandomNumberBetween(min, max) {
-          let randomNumber,
-            numberMin = min, 
-            numberMax = max,
-            maxTries = 3;
-
-          for (let noOfTries = 0; noOfTries < maxTries; noOfTries++) {
-            randomNumber = Math.round(Math.random() * (numberMax - numberMin) + numberMin);
-
-            if (randomNumber != selectedCake) {
-              selectedCake = randomNumber;
-              return selectedCake;
-            } 
-
-            if (noOfTries === (maxTries - 1)) {
-              selectedCake = selectedCake != 0 ? 0 : 1;
-              return selectedCake;
-            } 
+  constructor(data) {
+    this.description      = $('#description');
+    this.menu             = $('#menu');
+    this.selectedCake     = 0;
+    this.store            = data;
+    this.store.index      = () => {
+        let current = this;
+        for (let cake = 0; cake < this.store.cakes.length; cake++) {
+          if (this.store.cakes[cake].type === current.type) {
+            return cake;
           }
         }
+      }
+  }
 
-        function bindStoreEvents(store) {
-          Events.on('store.update.selected.cake', (selectedCake) => {
-            _setCakeAsSelected(store.cakes, selectedCake);
-          });
-        }
+  init() {
+    this.render();
+    this.bindUIevents();
+    this.bindStoreEvents(this.store);
+  }
 
-        function _setCakeAsSelected(cakes, selectedCake) {
-          cakes.forEach((cake, index) => {
-            cake.status = (index != selectedCake) ? '' : 'btn-primary';
-          });
-        }
+  render() {
+    this._generateCake('template/description.html', this.store.cakes[this.selectedCake], this.description);
+    this._generateCake('template/menu.html', this.store, this.menu);
+  }
 
-      })();
+  _generateCake(templateUrl, getCake, destination) {
+    $.get(templateUrl, (template) => {
+      let rendered = Mustache.render(template, getCake);
+      destination.html(rendered);
+    });
+  }
+
+  bindUIevents() {
+    this.menu.delegate('button', 'click', (button) => {
+
+      this.selectedCake = button.currentTarget.dataset.index ? button.currentTarget.dataset.index : this._getRandomNumberBetween(0,2);
+      Events.emit('store.update.selected.cake', this.selectedCake);
+
+      this.render(button.currentTarget.dataset);
+    });
+  };
+
+  _getRandomNumberBetween(min, max) {
+    let randomNumber,
+      numberMin = min, 
+      numberMax = max,
+      maxTries = 3;
+
+    for (let noOfTries = 0; noOfTries < maxTries; noOfTries++) {
+      randomNumber = Math.round(Math.random() * (numberMax - numberMin) + numberMin);
+
+      if (randomNumber != this.selectedCake) {
+        this.selectedCake = randomNumber;
+        return this.selectedCake;
+      } 
+
+      if (noOfTries === (maxTries - 1)) {
+        this.selectedCake = this.selectedCake != 0 ? 0 : 1;
+        return this.selectedCake;
+      } 
+    }
+  }
+
+  bindStoreEvents(store) {
+    Events.on('store.update.selected.cake', (selectedCake) => {
+      this._setCakeAsSelected(store.cakes, selectedCake);
+    });
+  }
+
+  _setCakeAsSelected(cakes, selectedCake) {
+    cakes.forEach((cake, index) => {
+      cake.status = (index != this.selectedCake) ? '' : 'btn-primary';
+    });
+  }
+};
+
+let startApp = new generateCake(Data).init();
